@@ -4,14 +4,20 @@ export class BusInfo {
     destination:string;
     time:number;
 
-    constructor(info:Object){
-        this.busName = info.vehicleId;
-        this.route = info.lineName;
-        this.destination = info.destinationName;
-        this.time = (parseInt(info.timeToStation)/60);
+    constructor(info:any){
+        try {
+            this.busName = info.vehicleId;
+            this.busName = this.busName.split(".")[0];
+            this.route = info.lineName;
+            this.destination = info.destinationName;
+            this.time = (parseInt(info.timeToStation)/60);
+        } catch (error) {
+            console.log("No buses found");            
+        }
     }
 
     print(){
-        console.log(`Bus with vehicle ID ${this.busName}:\nRoute - ${this.route}\nDestination - ${this.destination}\nTime to arrival - ${Math.round(this.time)} minutes`);
+        if(this.busName!= undefined)console.log(`Bus with vehicle ID ${this.busName}:\nRoute - ${this.route}\nDestination - ${this.destination}\nTime to arrival - ${Math.round(this.time)} minutes`);
     }
+    present():boolean {return this.busName != undefined;}
 }

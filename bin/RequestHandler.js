@@ -33,24 +33,27 @@ var RequestHandler = (function () {
             buses[n] = new BusInfo_1.BusInfo(busInfo[n]);
         }
         buses.sort(function (a, b) { return a.time - b.time; });
-        for (var n = 0; n < this.busNumber; n++) {
-            try {
-                buses[n].print();
-            }
-            catch (error) {
-                console.log("No more buses available - printed all " + buses.length);
-                break;
+        if (buses[0].present()) {
+            for (var n = 0; n < this.busNumber; n++) {
+                try {
+                    buses[n].print();
+                }
+                catch (error) {
+                    console.log("No more buses available - printed all (" + buses.length + ")");
+                    console.log(info);
+                    break;
+                }
             }
         }
     };
     RequestHandler.prototype.filterByStopcode = function (stopcode, busNumber) {
         this.busNumber = busNumber;
-        console.log("The closest " + busNumber + " buses to the stopcode " + stopcode + " are:");
+        console.log("\nThe closest " + busNumber + " buses to the stopcode " + stopcode + " are:");
         this.analyseInfo(this.getInfo(stopcode));
     };
     RequestHandler.prototype.filterByPostcode = function (postcode, busNumber) {
         var stopcodes = this.busStop.getNearestTwoBusStops(postcode);
-        if (stopcodes = null) {
+        if (stopcodes == null) {
             console.log("Error: failed to get postcode information");
             return;
         }

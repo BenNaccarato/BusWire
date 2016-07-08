@@ -33,28 +33,33 @@ export class RequestHandler {
         }
     }
     analyseInfo(info:string) {
-        var busInfo:Object[]= JSON.parse(info);
+        var busInfo:any[]= JSON.parse(info);
         var buses:BusInfo[] = new Array(busInfo.length);
-        for(var n=0;n<buses.length;n++){buses[n] = new BusInfo(busInfo[n]);}
+        for(var n=0;n<buses.length;n++) {
+            buses[n] = new BusInfo(busInfo[n]);
+        }
         buses.sort(function(a:BusInfo,b:BusInfo){return a.time-b.time});
+        if(buses[0].present()){
         for(var n=0;n<this.busNumber;n++){
             try{
                 buses[n].print();
             } catch(error){
-                console.log("No more buses available - printed all "+buses.length);
+                console.log("No more buses available - printed all ("+buses.length+")");
+                console.log(info);
                 break;
             }
+        }
         }
     }
 
     filterByStopcode(stopcode:number, busNumber:number){
         this.busNumber = busNumber;
-        console.log("The closest "+busNumber+" buses to the stopcode "+stopcode+" are:");
+        console.log("\nThe closest "+busNumber+" buses to the stopcode "+stopcode+" are:");
         this.analyseInfo(this.getInfo(stopcode));
     }
     filterByPostcode(postcode:string, busNumber:number){
         var stopcodes:number[] = this.busStop.getNearestTwoBusStops(postcode);
-        if(stopcodes = null) {
+        if(stopcodes == null) {
             console.log("Error: failed to get postcode information");
             return;
         } else {

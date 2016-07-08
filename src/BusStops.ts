@@ -37,10 +37,9 @@ export class BusStops {
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open( "GET", url, false );
             xmlHttp.send( null );
-            var postcodeInfo:JSON = JSON.parse(xmlHttp.responseText);
+            var postcodeInfo:any = JSON.parse(xmlHttp.responseText);
             var eastings:number = postcodeInfo.result.eastings;
             var northings:number = postcodeInfo.result.northings;
-            
             var stopcodes:number[] = [NaN,NaN];
 
             var bestDistance:number = NaN;
@@ -48,13 +47,13 @@ export class BusStops {
             this.busStops.forEach(stop => {
                 var info:string[] = stop.split(",");
                 var stopEasting:number = parseInt(info[4]);
-                var stopNorthing:number = parseInt(info[4]);
-                var distanceSquared:number = (eastings - stopEasting)*(eastings-stopNorthing) + (northings - stopNorthing)*(northings - stopNorthing);
+                var stopNorthing:number = parseInt(info[5]);
+                var distanceSquared:number = (eastings - stopEasting)*(eastings-stopEasting) + (northings - stopNorthing)*(northings - stopNorthing);
                 if(!isNaN(distanceSquared) && (isNaN(bestDistance) || distanceSquared < bestDistance)) {
                     secondBestDistance = bestDistance;
                     bestDistance = distanceSquared;
                     stopcodes[1] = stopcodes[0];
-                    stopcodes[0] = parseInt(info[0]);
+                    stopcodes[0] = parseInt(info[1]);
                 } else {
                     if(isNaN(secondBestDistance) || distanceSquared < secondBestDistance) {
                         secondBestDistance = distanceSquared;

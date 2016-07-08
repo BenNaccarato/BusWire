@@ -41,13 +41,13 @@ var BusStops = (function () {
             this.busStops.forEach(function (stop) {
                 var info = stop.split(",");
                 var stopEasting = parseInt(info[4]);
-                var stopNorthing = parseInt(info[4]);
-                var distanceSquared = (eastings - stopEasting) * (eastings - stopNorthing) + (northings - stopNorthing) * (northings - stopNorthing);
+                var stopNorthing = parseInt(info[5]);
+                var distanceSquared = (eastings - stopEasting) * (eastings - stopEasting) + (northings - stopNorthing) * (northings - stopNorthing);
                 if (!isNaN(distanceSquared) && (isNaN(bestDistance) || distanceSquared < bestDistance)) {
                     secondBestDistance = bestDistance;
                     bestDistance = distanceSquared;
                     stopcodes[1] = stopcodes[0];
-                    stopcodes[0] = parseInt(info[0]);
+                    stopcodes[0] = parseInt(info[1]);
                 }
                 else {
                     if (isNaN(secondBestDistance) || distanceSquared < secondBestDistance) {
